@@ -26,15 +26,17 @@ public class DummyFlightController {
 
 	@GetMapping("/first")
 	public List<Flight> getFlightInfo(@RequestParam("from") String from, @RequestParam("to") String to,
-			@RequestParam("date") String date) {
+			@RequestParam("date") String date) throws InterruptedException {
+		Thread.sleep(500);
 		log.info("*********first system invoked **********");
 		return FlightsUtils.generateRandomFlightDataAPI();
 	}
 
 	@GetMapping("/second")
 	public List<Flight> getFlightInfo2(@RequestParam("from") String from, @RequestParam("to") String to,
-			@RequestParam("date") String date) {
+			@RequestParam("date") String date) throws InterruptedException {
 		log.info("*********Second system invoked **********");
+		Thread.sleep(600);
 		return FlightsUtils.generateRandomFlightDataAPI();
 	}
 
