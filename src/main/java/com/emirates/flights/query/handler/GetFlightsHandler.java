@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.emirates.flights.client.FlightSystemFirst;
+import com.emirates.flights.client.FlightSystemFourth;
 import com.emirates.flights.client.FlightSystemSecond;
+import com.emirates.flights.client.FlightSystemThird;
 import com.emirates.flights.exception.NoFlightInfoFoundException;
 import com.emirates.flights.model.Flight;
 import com.emirates.flights.repository.FlightsRepository;
@@ -38,6 +40,12 @@ public class GetFlightsHandler {
 	@Autowired
 	private FlightSystemSecond flightSystemSecond;
 
+	@Autowired
+	private FlightSystemThird flightSystemThird;
+
+	@Autowired
+	private FlightSystemFourth flightSystemFourth;
+
 	public Flux<Flight> getFlights(String from, String to, String date) {
 		// can add date filter later depends on biz logic
 
@@ -55,7 +63,13 @@ public class GetFlightsHandler {
 		// get data from system 2
 		Flux<Flight> flightResults2 = flightSystemSecond.getFlightsInfo(from, to, date);
 
-		Flux<Flight> mergedFlux = Flux.merge(dbResults, flightResults1, flightResults2)
+		// get data from system 3
+		Flux<Flight> flightResults3 = flightSystemThird.getFlightsInfo(from, to, date);
+
+		// get data from system 4
+		Flux<Flight> flightResults4 = flightSystemFourth.getFlightsInfo(from, to, date);
+
+		Flux<Flight> mergedFlux = Flux.merge(dbResults, flightResults1, flightResults2, flightResults3, flightResults4)
 				.sort((f1, f2) -> f1.getDurationInMinutes().compareTo(f2.getDurationInMinutes()))
 				.switchIfEmpty(Flux.error(new NoFlightInfoFoundException()));
 

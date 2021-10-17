@@ -42,8 +42,17 @@ public class DummyFlightController {
 
 	@GetMapping("/third")
 	public List<Flight> getFlightInfo3(@RequestParam("from") String from, @RequestParam("to") String to,
-			@RequestParam("date") String date) {
+			@RequestParam("date") String date) throws InterruptedException {
 		log.info("*********third system invoked **********");
+		Thread.sleep(600);
+		return FlightsUtils.generateRandomFlightDataAPI();
+	}
+
+	@GetMapping("/fourth")
+	public List<Flight> getFlightInfo4(@RequestParam("from") String from, @RequestParam("to") String to,
+			@RequestParam("date") String date) throws InterruptedException {
+		log.info("*********fourth system invoked **********");
+		Thread.sleep(500);
 		return FlightsUtils.generateRandomFlightDataAPI();
 	}
 
