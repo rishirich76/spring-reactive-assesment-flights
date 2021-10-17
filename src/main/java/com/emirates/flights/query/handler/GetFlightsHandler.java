@@ -70,6 +70,7 @@ public class GetFlightsHandler {
 		Flux<Flight> flightResults4 = flightSystemFourth.getFlightsInfo(from, to, date);
 
 		Flux<Flight> mergedFlux = Flux.merge(dbResults, flightResults1, flightResults2, flightResults3, flightResults4)
+				.filter(f -> to.equals(f.getTo()))
 				.sort((f1, f2) -> f1.getDurationInMinutes().compareTo(f2.getDurationInMinutes()))
 				.switchIfEmpty(Flux.error(new NoFlightInfoFoundException()));
 
